@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d20">
+  <title>Nova — Welcome Back</title>
+  <style>
+    :root {
+      --bg:#080d20; --bg2:#101b39; --primary:#8b5cf6; --secondary:#38bdf8;
+      --accent:#c4b5fd; --glow:rgba(139,92,246,.32);
+      --card1:rgba(25,28,66,.88); --card2:rgba(12,19,43,.96);
+      --text:#f7f7ff; --muted:#a3acc8; --border:rgba(255,255,255,.12);
+      --input:rgba(255,255,255,.045); --success:#6ee7b7;
+    }
+    body[data-theme="purple"]{--bg:#080d20;--bg2:#17234a;--primary:#8b5cf6;--secondary:#38bdf8;--accent:#c4b5fd;--glow:rgba(139,92,246,.32);--card1:rgba(37,29,79,.94);--card2:rgba(11,21,45,.97)}
+    body[data-theme="pink-red"]{--bg:#200b1c;--bg2:#46152e;--primary:#fb4f9b;--secondary:#ff6b6b;--accent:#ffb4d2;--glow:rgba(251,79,155,.34);--card1:rgba(77,23,58,.94);--card2:rgba(36,13,33,.97)}
+    body[data-theme="sunset"]{--bg:#211109;--bg2:#542a16;--primary:#ff8a3d;--secondary:#ffd166;--accent:#ffcc8f;--glow:rgba(255,138,61,.34);--card1:rgba(83,43,27,.94);--card2:rgba(39,22,20,.97)}
+    body[data-theme="mint"]{--bg:#061b19;--bg2:#103c34;--primary:#34d399;--secondary:#a3e635;--accent:#a7f3d0;--glow:rgba(52,211,153,.30);--card1:rgba(19,65,54,.94);--card2:rgba(7,30,29,.97)}
+    body[data-theme="ocean"]{--bg:#061727;--bg2:#0c3a5b;--primary:#38bdf8;--secondary:#2563eb;--accent:#bae6fd;--glow:rgba(56,189,248,.32);--card1:rgba(14,56,91,.94);--card2:rgba(6,26,49,.97)}
+    body[data-theme="slate"]{--bg:#11151c;--bg2:#303846;--primary:#94a3b8;--secondary:#64748b;--accent:#e2e8f0;--glow:rgba(148,163,184,.25);--card1:rgba(55,65,81,.94);--card2:rgba(25,32,43,.97)}
+    body[data-theme="lavender"]{--bg:#1a1029;--bg2:#38204e;--primary:#f472b6;--secondary:#a78bfa;--accent:#f5d0fe;--glow:rgba(244,114,182,.30);--card1:rgba(67,36,79,.94);--card2:rgba(31,20,52,.97)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{min-height:100%;color-scheme:dark}
+    body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:38px 20px;overflow-x:hidden;font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--text);background:radial-gradient(ellipse at 12% 15%,var(--glow),transparent 42%),radial-gradient(ellipse at 90% 85%,var(--glow),transparent 38%),linear-gradient(135deg,var(--bg),var(--bg2),var(--bg));background-attachment:fixed;transition:background-color .6s ease,color .3s ease;-webkit-font-smoothing:antialiased}
+    body::before,body::after{content:"";position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(90px);opacity:.16;pointer-events:none;z-index:-1;background:var(--primary);animation:ambient 12s ease-in-out infinite alternate}
+    body::before{top:-100px;left:-100px}body::after{right:-100px;bottom:-120px;background:var(--secondary);animation-delay:-6s}
+    button,input{font:inherit}button{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--secondary);outline-offset:4px}button:disabled{cursor:not-allowed;opacity:.65}
+    .page{width:100%;max-width:450px;position:relative;z-index:1;margin:auto;animation:pageIn .8s cubic-bezier(.2,.8,.2,1) both}
+    .brand{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:27px}
+    .brand-mark{width:37px;height:37px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 5px 24px var(--glow);font-size:20px;font-weight:900;color:white;transform:rotate(-5deg)}
+    .brand-name{font-size:20px;font-weight:800;letter-spacing:2px}.brand-name span{color:var(--accent)}
+    .theme-heading{text-align:center;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2.5px;color:var(--muted);margin-bottom:13px}
+    .theme-switcher{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:27px}
+    .theme-swatch{position:relative;width:39px;height:35px;padding:3px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.055);cursor:pointer;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+    .theme-swatch:hover{transform:translateY(-4px) scale(1.06)}.theme-swatch.active{border-color:rgba(255,255,255,.85);box-shadow:0 0 0 2px var(--primary),0 0 19px var(--glow);transform:translateY(-2px)}
+    .swatch-colors{display:flex;width:100%;height:100%;overflow:hidden;border-radius:8px}.swatch-colors span{flex:1}
+    .swatch-check{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:18px;font-weight:900;opacity:0;transform:scale(.5);text-shadow:0 1px 5px rgba(0,0,0,.8);transition:.2s ease}.theme-swatch.active .swatch-check{opacity:1;transform:scale(1)}
+    .card-scene{perspective:1200px;width:100%}.card-flipper{display:grid;width:100%;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.2,.75,.25,1)}.card-flipper.is-flipped{transform:rotateY(180deg)}
+    .card-face{grid-area:1/1;min-width:0;border:1px solid rgba(255,255,255,.16);border-radius:27px;padding:34px 30px 27px;background:radial-gradient(ellipse at 10% 0%,var(--glow),transparent 58%),linear-gradient(145deg,var(--card1),var(--card2));box-shadow:0 28px 70px rgba(0,0,0,.3),0 0 35px var(--glow),inset 0 1px 0 rgba(255,255,255,.12);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:border-color .5s ease,box-shadow .5s ease}
+    .card-front{position:relative;z-index:2;transform:rotateY(0deg)}.card-back{transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:510px;gap:17px;padding:34px 28px}
+    .card-flipper.is-flipped .card-front{pointer-events:none}.card-flipper:not(.is-flipped) .card-back{pointer-events:none}
+    .welcome-icon{width:55px;height:55px;display:grid;place-items:center;border-radius:18px;margin-bottom:23px;color:white;background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 9px 28px var(--glow)}.welcome-icon svg{width:28px;height:28px}
+    h1{font-size:clamp(26px,7vw,32px);font-weight:800;letter-spacing:-1.2px;line-height:1.2;margin-bottom:9px}.gradient-text{background:linear-gradient(100deg,var(--accent),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .subtitle{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:28px}
+    .field{position:relative;margin-bottom:19px}.field-icon{position:absolute;left:16px;top:50%;width:19px;height:19px;transform:translateY(-50%);color:var(--muted);pointer-events:none;transition:color .25s ease;z-index:1}
+    .field input{width:100%;height:60px;border:1px solid var(--border);border-radius:13px;background:var(--input);padding:22px 45px 9px 48px;color:var(--text);outline:none;font-size:14px;transition:border-color .25s ease,box-shadow .25s ease,background .25s ease}
+    .field input:hover{border-color:rgba(255,255,255,.25)}.field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--glow),0 5px 18px rgba(0,0,0,.08);background:rgba(255,255,255,.065)}.field:focus-within .field-icon{color:var(--accent)}
+    .field label{position:absolute;top:50%;left:48px;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none;transform-origin:left center;transition:top .2s ease,font-size .2s ease,color .2s ease}
+    .field input:focus+label,.field input:not(:placeholder-shown)+label{top:13px;font-size:10px;font-weight:700;letter-spacing:.4px;color:var(--accent)}
+    .password-toggle{position:absolute;right:13px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:31px;height:34px;border:0;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;transition:color .2s ease,background .2s ease}.password-toggle:hover{color:var(--text);background:rgba(255,255,255,.08)}.password-toggle svg{width:18px;height:18px}
+    .form-options{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:5px 0 24px;font-size:12px}
+    .remember{display:inline-flex;align-items:center;gap:8px;color:var(--muted);cursor:pointer;user-select:none}.remember input{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
+    .text-link{color:var(--accent);text-decoration:none;font-weight:700;transition:color .2s ease}.text-link:hover{color:var(--secondary);text-decoration:underline}
+    .sign-in{position:relative;width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;gap:11px;overflow:hidden;border:1px solid rgba(255,255,255,.18);border-radius:13px;background:linear-gradient(105deg,var(--primary),var(--secondary));color:#fff;font-size:14px;font-weight:800;letter-spacing:.3px;box-shadow:0 9px 25px var(--glow);cursor:pointer;transition:transform .2s ease,box-shadow .25s ease,filter .2s ease}
+    .sign-in::before{content:"";position:absolute;top:-50%;left:-70%;width:40%;height:200%;transform:rotate(25deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);transition:left .6s ease}.sign-in:hover::before{left:130%}.sign-in:hover{transform:translateY(-2px);box-shadow:0 13px 32px var(--glow);filter:brightness(1.08)}.sign-in:active{transform:scale(.98)}.sign-in svg{width:19px;height:19px;transition:transform .2s ease}.sign-in:hover svg{transform:translateX(4px)}
+    .card-footer{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.09);display:flex;justify-content:center;align-items:center;gap:7px;color:var(--muted);font-size:11px;text-align:center}.status-dot{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 9px rgba(110,231,183,.7)}
+    .success-orb{width:90px;height:90px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:linear-gradient(145deg,var(--primary),var(--secondary));box-shadow:0 0 45px var(--glow),inset 0 1px 0 rgba(255,255,255,.3);animation:orbPulse 2s ease-in-out infinite}.success-orb svg{width:43px;height:43px;color:white}
+    .card-back h2{font-size:27px;font-weight:800;letter-spacing:-.8px}.card-back p{max-width:260px;font-size:13px;line-height:1.8;color:var(--muted)}
+    .theme-preview{display:flex;align-items:center;gap:8px;margin:3px 0 6px;color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}.preview-dot{width:9px;height:9px;border-radius:50%;background:var(--primary);box-shadow:0 0 12px var(--glow)}
+    .back-button{width:100%;max-width:255px;min-height:48px;padding:12px 20px;margin-top:6px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.08);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:background .2s ease,transform .2s ease}.back-button:hover{background:var(--glow);transform:translateY(-2px)}
+    .toast-region{position:fixed;z-index:20;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;width:min(350px,calc(100vw - 40px));pointer-events:none}
+    .toast{display:flex;align-items:flex-start;gap:12px;padding:15px 16px;border:1px solid rgba(255,255,255,.17);border-radius:14px;background:rgba(15,20,42,.95);box-shadow:0 12px 38px rgba(0,0,0,.28),0 0 20px var(--glow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);animation:toastIn .35s cubic-bezier(.2,.8,.2,1) both;pointer-events:auto}.toast.toast-out{animation:toastOut .25s ease forwards}
+    .toast-icon{flex-shrink:0;display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--primary),var(--secondary));font-size:14px}.toast-copy strong{display:block;font-size:12px;margin-bottom:4px;color:#fff}.toast-copy p{font-size:11px;line-height:1.6;color:#b8c0d9}
+    @keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}@keyframes ambient{from{transform:translate(0,0) scale(1)}to{transform:translate(35px,25px) scale(1.12)}}@keyframes orbPulse{0%,100%{box-shadow:0 0 35px var(--glow)}50%{box-shadow:0 0 55px var(--glow)}}@keyframes toastIn{from{opacity:0;transform:translateX(20px) scale(.96)}to{opacity:1;transform:translateX(0) scale(1)}}@keyframes toastOut{to{opacity:0;transform:translateX(20px) scale(.96)}}
+    @media(max-width:480px){body{padding:28px 15px}.brand{margin-bottom:23px}.theme-switcher{gap:9px;margin-bottom:23px}.theme-swatch{width:36px;height:34px}.card-face{padding:27px 21px 23px;border-radius:23px}.card-back{min-height:495px}.welcome-icon{width:50px;height:50px;margin-bottom:20px}.subtitle{margin-bottom:24px}.field input{height:57px}.toast-region{right:12px;bottom:12px;width:calc(100vw - 24px)}}
+    @media(max-width:350px){.form-options{font-size:11px}.card-face{padding-right:17px;padding-left:17px}.theme-switcher{gap:7px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body data-theme="purple">
+  <main class="page">
+    <header class="brand" aria-label="Nova home"><div class="brand-mark" aria-hidden="true">N</div><div class="brand-name">NOVA<span>.</span></div></header>
+    <section aria-label="Choose a color theme">
+      <p class="theme-heading">Choose your color mood</p>
+      <div class="theme-switcher" role="group" aria-label="Color themes">
+        <button class="theme-swatch active" type="button" data-theme="purple" aria-label="Purple and blue theme" aria-pressed="true" title="Purple and blue"><span class="swatch-colors"><span style="background:#8b5cf6"></span><span style="background:#38bdf8"></span></span><span class="swatch-check" aria-hidden="true">✓</span></button>
+        <button class="theme-swatch" type="button" data-theme="pink-red" aria-label="Pink and red theme" aria-pressed="false" title="Pink and red"><span class="swatch-colors"><span style="background:#fb4f9b"></span><span style="background:#ff6b6b"></span></span><span class="swatch-check" aria-hidden="true">✓</span></button>
+        <button class="theme-swatch" type="button" data-theme="sunset" aria-label="Orange and yellow theme" aria-pressed="false" title="Orange and yellow"><span class="swatch-colors"><span style="background:#ff8a3d"></span><span style="background:#ffd166"></span></span><span class="swatch-check" aria-hidden="true">✓</span></button>
+        <button class="theme-swatch" type="button" data-theme="mint" aria-label="Mint and green theme" aria-pressed="false" title="Mint and green"><span class="swatch-colors"><span style="background:#34d399"></span><span style="background:#a3e635"></span></span><span class="swatch-check" aria-hidden="true">✓</span></button>
+        <button class="theme-swatch" type="button" data-theme="ocean" aria-label="Sky blue and ocean blue theme" aria-pressed="false" title="Sky blue and ocean blue"><span class="swatch-colors"><span style="background:#38bdf8"></span><span style="background:#2563eb"></span></span><span class="swatch-check" aria-hidden="true">✓</span></button>
+        <button class="theme-swatch" type="button" data-theme="slate" aria-label="Slate gray theme" aria-pressed="false" title="Slate gray"><span class="swatch-colors"><span style="background:#94a3b8"></span><span style="background:#475569"></span></span><span class="swatch-check" aria-hidden="true">✓</span></button>
+        <button class="theme-swatch" type="button" data-theme="lavender" aria-label="Pink and lavender theme" aria-pressed="false" title="Pink and lavender"><span class="swatch-colors"><span style="background:#f472b6"></span><span style="background:#a78bfa"></span></span><span class="swatch-check" aria-hidden="true">✓</span></button>
+      </div>
+    </section>
+    <div class="card-scene">
+      <div class="card-flipper" id="cardFlipper">
+        <section class="card-face card-front" aria-labelledby="welcomeHeading">
+          <div class="welcome-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 5.6L20 11l-5.6 2.4L12 19l-2.4-5.6L4 11l5.6-2.4L12 3z"/><path d="M19 15l1.2 2.8L23 19l-2.8 1.2L19 23l-1.2-2.8L15 19l2.8-1.2L19 15z"/></svg></div>
+          <h1 id="welcomeHeading">Welcome <span class="gradient-text">Back</span></h1>
+          <p class="subtitle">Enter your details to continue.</p>
+          <form id="loginForm" autocomplete="on">
+            <div class="field">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>
+              <input id="username" name="username" type="text" placeholder=" " autocomplete="username" aria-label="Username" required minlength="2" maxlength="40"><label for="username">Username</label>
+            </div>
+            <div class="field">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              <input id="password" name="password" type="password" placeholder=" " autocomplete="current-password" aria-label="Password" required minlength="4" maxlength="128"><label for="password">Password</label>
+              <button class="password-toggle" id="togglePassword" type="button" aria-label="Show password" aria-pressed="false" title="Show or hide password"><svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+            <div class="form-options">
+              <label class="remember" for="rememberMe"><input type="checkbox" id="rememberMe" name="remember"><span>Remember me</span></label>
+              <a href="#" class="text-link" id="forgotLink">Forgot password?</a>
+            </div>
+            <button class="sign-in" type="submit" id="signInButton"><span>Sign In</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+          </form>
+          <footer class="card-footer"><span class="status-dot" aria-hidden="true"></span><span>Made with creativity &amp; a little magic.</span></footer>
+        </section>
+        <section class="card-face card-back" id="themeBack" aria-labelledby="themeUpdatedHeading" aria-hidden="true" inert>
+          <div class="success-orb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></div>
+          <div class="theme-preview"><span class="preview-dot"></span><span id="themeName">Purple &amp; Blue</span></div>
+          <h2 id="themeUpdatedHeading">Theme <span class="gradient-text">Updated!</span></h2>
+          <p>Your new color mood is ready. A fresh look, just for you.</p>
+          <button type="button" class="back-button" id="backToLogin">← &nbsp; Back to Login</button>
+          <p style="font-size:11px;margin-top:5px;">Your style, your space.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+  <script>
+    "use strict";
+    const body=document.body;
+    const cardFlipper=document.getElementById("cardFlipper");
+    const themeBack=document.getElementById("themeBack");
+    const themeName=document.getElementById("themeName");
+    const swatches=document.querySelectorAll(".theme-swatch");
+    const loginForm=document.getElementById("loginForm");
+    const usernameInput=document.getElementById("username");
+    const passwordInput=document.getElementById("password");
+    const togglePassword=document.getElementById("togglePassword");
+    const eyeIcon=document.getElementById("eyeIcon");
+    const forgotLink=document.getElementById("forgotLink");
+    const backToLogin=document.getElementById("backToLogin");
+    const signInButton=document.getElementById("signInButton");
+    const toastRegion=document.getElementById("toastRegion");
+    const reducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
+    const themes={"purple":"Purple & Blue","pink-red":"Pink & Red","sunset":"Orange & Yellow","mint":"Mint & Green","ocean":"Sky & Ocean Blue","slate":"Slate Gray","lavender":"Pink & Lavender"};
+    let flipTimer=null;
+    function showToast(title,message,icon="✦"){
+      const toast=document.createElement("div"),iconBox=document.createElement("div"),copy=document.createElement("div"),heading=document.createElement("strong"),description=document.createElement("p");
+      toast.className="toast";iconBox.className="toast-icon";copy.className="toast-copy";
+      iconBox.textContent=icon;heading.textContent=title;description.textContent=message;
+      copy.append(heading,description);toast.append(iconBox,copy);toastRegion.appendChild(toast);
+      const removeToast=()=>{if(!toast.isConnected)return;toast.classList.add("toast-out");toast.addEventListener("animationend",()=>toast.remove(),{once:true});window.setTimeout(()=>toast.remove(),500)};
+      window.setTimeout(removeToast,3600);
+      while(toastRegion.children.length>3)toastRegion.firstElementChild.remove();
+    }
+    function setTheme(theme,button){
+      if(!Object.prototype.hasOwnProperty.call(themes,theme))return;
+      if(body.dataset.theme===theme&&!cardFlipper.classList.contains("is-flipped")){showToast("Looking good!","This color mood is already active.","✦");return}
+      if(flipTimer!==null){window.clearTimeout(flipTimer);flipTimer=null}
+      swatches.forEach(swatch=>{const active=swatch.dataset.theme===theme;swatch.classList.toggle("active",active);swatch.setAttribute("aria-pressed",String(active))});
+      body.dataset.theme=theme;themeName.textContent=themes[theme];
+      if(cardFlipper.classList.contains("is-flipped")){flipTimer=window.setTimeout(finishThemeFlip,2400);showToast("Colors changed!",themes[theme]+" is now active.","✓");return}
+      if(button){cardFlipper.classList.add("is-flipped");themeBack.removeAttribute("inert");themeBack.setAttribute("aria-hidden","false");flipTimer=window.setTimeout(finishThemeFlip,2400)}
+      showToast("Theme updated!",themes[theme]+" is now active.","✓");
+    }
+    function finishThemeFlip(){
+      flipTimer=null;cardFlipper.classList.remove("is-flipped");themeBack.setAttribute("aria-hidden","true");themeBack.setAttribute("inert","");
+      const activeSwatch=document.querySelector(".theme-swatch.active");
+      if(activeSwatch&&document.activeElement===backToLogin)activeSwatch.focus({preventScroll:true});
+    }
+    swatches.forEach(button=>button.addEventListener("click",()=>setTheme(button.dataset.theme,button)));
+    backToLogin.addEventListener("click",()=>{if(flipTimer!==null){window.clearTimeout(flipTimer);flipTimer=null}finishThemeFlip();showToast("Welcome back!","Your login form is ready.","✦")});
+    const eyeOpen='<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
+    const eyeClosed='<path d="m3 3 18 18"/><path d="M10.6 5.1A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a16 16 0 0 1-4 4.8"/><path d="M6.6 6.6C3.6 8.4 2 12 2 12s3.6 7 10 7a10.8 10.8 0 0 0 4-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
+    togglePassword.addEventListener("click",()=>{
+      const showing=passwordInput.type==="text";passwordInput.type=showing?"password":"text";eyeIcon.innerHTML=showing?eyeOpen:eyeClosed;
+      togglePassword.setAttribute("aria-label",showing?"Show password":"Hide password");togglePassword.setAttribute("aria-pressed",String(!showing));togglePassword.title=showing?"Show password":"Hide password";
+      showToast(showing?"Password hidden":"Password visible",showing?"Your password is concealed.":"Your password can now be seen.",showing?"◉":"◎");
+    });
+    forgotLink.addEventListener("click",event=>{event.preventDefault();showToast("Need a hand?","This is a demo page. Password recovery is not connected yet.","?")});
+    loginForm.addEventListener("submit",event=>{
+      event.preventDefault();if(!loginForm.reportValidity())return;
+      const username=usernameInput.value.trim();
+      if(username.length<2){usernameInput.setCustomValidity("Please enter at least 2 characters.");usernameInput.reportValidity();usernameInput.setCustomValidity("");usernameInput.focus();return}
+      signInButton.disabled=true;signInButton.querySelector("span").textContent="Signing in...";signInButton.setAttribute("aria-busy","true");
+      window.setTimeout(()=>{
+        signInButton.disabled=false;signInButton.querySelector("span").textContent="Sign In";signInButton.removeAttribute("aria-busy");
+        showToast("Hello, "+username+"!","Demo login successful! No account was authenticated.","✓");
+        passwordInput.value="";usernameInput.focus();
+      },reducedMotion.matches?0:650);
+    });
+    document.addEventListener("keydown",event=>{
+      if(event.key==="Escape"&&cardFlipper.classList.contains("is-flipped")){if(flipTimer!==null){window.clearTimeout(flipTimer);flipTimer=null}finishThemeFlip()}
+    });
+    themeBack.setAttribute("aria-hidden","true");themeBack.setAttribute("inert","");
+  </script>
+</body>
+</html>
